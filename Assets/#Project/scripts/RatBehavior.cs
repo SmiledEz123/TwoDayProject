@@ -9,6 +9,8 @@ public class RatBehavior : MonoBehaviour
     [SerializeField]Transform targets;
     [SerializeField]Transform familly;
     [SerializeField]Transform playerT;
+
+    Transform theChosenRat;
     
     IStateRatMachine stateManager;
     // Start is called before the first frame update
@@ -17,6 +19,7 @@ public class RatBehavior : MonoBehaviour
         rat = this.GetComponent<NavMeshAgent>();
         stateManager = new IStateRatMachine(targets,this.gameObject.GetComponent<Transform>(),playerT,rat);
         stateManager.TransitionTo(stateManager.idleState);
+        theChosenRat = this.GetComponent<Transform>();
 
     }
 
@@ -24,56 +27,54 @@ public class RatBehavior : MonoBehaviour
     void Update()
     {
         /*
-        if(je suis mort)
+        if(theChosenRat.GetComponent<RatBehavior>().stateManager.CurrentState == stateManager.idleState)
+            {
+        while(theChosenRat == rat)
         {
-            faireLeMort;
+            theChosenRat = rat.parent.GetChild(Random.Range(1,rat.parent.childCount));
         }
-        else if(veuxtuerjoueur)
-        {
-            tuerJoueur;
         }
-        else if(voisjoueur)//si il ne veux pas tuer le joueur
-        {
-            ildoismanger = faux;
-            fuire;
-        }else if(ildoismanger)//si il ne veux pas tuer le joueur et ne le vois pas
-        {
-            allermanger;
-        }
-        else//si il ne veux pas tuer le joueur et ne le vois pas et ne veut pas manger
-        {
-        stateManager.Perform();
-        }*/
-        if(stateManager.CurrentState == stateManager.deadState)
-        {
-            stateManager.Perform();
-        }
-        else if(familly.childCount >= 20)
+        */
+
+        if(familly.childCount >= 20)
         {
             stateManager.TransitionTo(stateManager.attackState);
-            stateManager.Perform();
         }
-        else if(CanSeePlayer() || stateManager.CurrentState == stateManager.runingAwayState)
+        else if(CanSeePlayer())
         {
-            if(stateManager.CurrentState != stateManager.runingAwayState)
+            if(stateManager.CurrentState != stateManager.runingAwayState && stateManager.CurrentState != stateManager.deadState && stateManager.CurrentState != stateManager.attackState && stateManager.CurrentState != stateManager.lookingToEatState)
             {
             stateManager.TransitionTo(stateManager.runingAwayState);
             }
-            stateManager.Perform();
+        }
+        else if(stateManager.CurrentState == stateManager.deadState && theChosenRat.GetComponent<RatBehavior>().stateManager.CurrentState != stateManager.lookingToEatState)
+        {
+            CallForHelp();
         }
         else if(stateManager.CurrentState == stateManager.lookingToEatState)
         {
-            stateManager.Perform();
         }
-        else
-        {
-            if(stateManager.CurrentState != stateManager.idleState)
-            {
-            stateManager.TransitionTo(stateManager.idleState);
-            }
-            stateManager.Perform();
-        }
+        stateManager.Perform();
     }
+
+
+    
+    public void CallForHelp()
+    {
+        
+            theChosenRat = this.GetComponent<Transform>().parent.GetChild(Random.Range(1,this.GetComponent<Transform>().parent.childCount));
+            int i=0;
+        while(theChosenRat == this.GetComponent<Transform>() && i!=10)
+        {
+            if(theChosenRat.GetComponent<RatBehavior>().stateManager.CurrentState == stateManager.idleState && i != 100)
+        {
+            theChosenRat = this.GetComponent<Transform>().parent.GetChild(Random.Range(1,this.GetComponent<Transform>().parent.childCount));
+        }
+        }
+        theChosenRat.GetComponent<RatBehavior>().theChosenRat = this.GetComponent<Transform>();
+        theChosenRat.GetComponent<RatBehavior>().stateManager.TransitionTo(stateManager.lookingToEatState);
+    }
+
 
     public void Die()
     {

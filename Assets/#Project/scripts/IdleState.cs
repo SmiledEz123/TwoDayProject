@@ -36,6 +36,5 @@ public class IdleState : IStateRat
 
     public void Exit()
     {
-        
     }
 }

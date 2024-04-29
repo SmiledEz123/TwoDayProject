@@ -32,6 +32,7 @@ public class RuningAwayState : IStateRat
         Debug.Log("RUN");
         nextDestination = ChoseADestination();
         ratAgent.SetDestination(nextDestination.position);
+        ratAgent.speed = 6;
     }
 
     public void Perform()
@@ -44,7 +45,7 @@ public class RuningAwayState : IStateRat
 
     public void Exit()
     {
-        
+        ratAgent.speed = 3.5f;
     }
 
       private Transform ChoseADestination()

@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    float moveSpeed = 15;
+    float moveSpeed = 30;
     float mMoveSpeed = 5;
     float horizontalInput;
     float verticalInput;

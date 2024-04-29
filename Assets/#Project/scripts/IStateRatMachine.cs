@@ -16,6 +16,7 @@ public class IStateRatMachine
     Transform targets;
     Transform rat;
     NavMeshAgent ratAg;
+    public Transform ThechosenRat;
 
     public IStateRatMachine(Transform targets,Transform rat,Transform playerT,NavMeshAgent ratAg)
     {
@@ -23,11 +24,17 @@ public class IStateRatMachine
         idleState = new IdleState(targets,rat.gameObject.GetComponent<NavMeshAgent>(),rat);
         lookingToEatState = new LookingToEatState();
         runingAwayState = new RuningAwayState();
-        deadState = new DeadState();
+        deadState = new DeadState(rat);
         this.playerT = playerT;
         this.rat = rat;
         this.targets = targets;
         this.ratAg = ratAg;
+        
+    }
+
+    public void reciveChosenRat(Transform chosen)
+    {
+        ThechosenRat = chosen;
     }
 
     public void Perform()
@@ -42,7 +49,17 @@ public class IStateRatMachine
         if(CurrentState != runingAwayState && nextState == runingAwayState)
             {
                 TransitionToRuningAwayState(nextState);
-            }else{CurrentState = nextState;}
+            }
+            else if(CurrentState != lookingToEatState && nextState == lookingToEatState)
+            {
+                CurrentState = new LookingToEatState(ratAg,ThechosenRat);
+            }
+            else if(CurrentState != deadState && nextState == deadState)
+            {
+                CurrentState = nextState;
+            }
+            else
+            {CurrentState = nextState;}
         CurrentState.Enter();
     }
 

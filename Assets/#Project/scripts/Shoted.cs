@@ -7,9 +7,9 @@ public class Shoted : MonoBehaviour
 {
     Boolean shot;
     Rigidbody m_RigidBody;
-    float mMoveSpeed = 20;
+    float mMoveSpeed = 100;
     Vector3 newPoss;
-    float cd=0.1f;
+    float cd=0.05f;
     float time;
 
     Boolean activateCollision = false;
@@ -55,9 +55,12 @@ public class Shoted : MonoBehaviour
    private void OnTriggerEnter(Collider other) {
     if(activateCollision)
     {
+        if(other.gameObject.tag == "Rat")
+    {
+        other.GetComponent<RatBehavior>().Die();
+    }
         Destroy(gameObject);
     }
    }
-       
-    }
+}
     
