@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    float moveSpeed = 15;
+    float moveSpeed = 50;
     float mMoveSpeed = 5;
     float horizontalInput;
     float verticalInput;
@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
         mouseMovement = mMoveSpeed * new Vector3(-Input.GetAxis("Mouse Y"),Input.GetAxis("Mouse X"),0);
         horizontalInput = getXaxis();
         verticalInput = getYaxis();
-        Vector3 m_Input = new Vector3(horizontalInput,0,verticalInput)* Time.deltaTime * moveSpeed;
+        Vector3 m_Input = new Vector3(horizontalInput,0,verticalInput)* (Time.deltaTime * moveSpeed);
         m_Input = transform.TransformDirection(m_Input);
         Vector3 newPoss = transform.position + m_Input;
         m_RigidBody.MovePosition(newPoss);
@@ -81,5 +81,10 @@ public class Player : MonoBehaviour
     private void showBullet()
     {
         fleche.gameObject.SetActive(true);
+    }
+
+    public void TakeDmg()
+    {
+        Debug.Log("outch");
     }
 }

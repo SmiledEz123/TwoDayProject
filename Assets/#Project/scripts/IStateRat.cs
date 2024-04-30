@@ -19,4 +19,6 @@ public interface IStateRat
     {
         
     }
+    public void Touche(Collision other)
+    {}
 }
